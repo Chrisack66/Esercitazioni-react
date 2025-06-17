@@ -17,7 +17,7 @@ const frasi = [
 
   return (
     <>
-      {frasi.map ((x) => (<Section paragrafo = {x.paragrafo} button = {x.button}></Section>) )}
+      {frasi.map ((x, index) => (<Section key = {index} paragrafo = {x.paragrafo} button = {x.button}></Section>) )}
 
     </>
   )

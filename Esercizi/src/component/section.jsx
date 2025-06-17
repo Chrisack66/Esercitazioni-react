@@ -4,10 +4,15 @@ function Section (props) {
     function handleClick() {
         console.log(props.paragrafo)
     }
-    const toggle = true;
+    let toggle = true;
+    function handleToggle() {
+        toggle=!toggle;
+    }
+    
 
     return (
         <section>
+            <Button label="toggle" funzione={handleToggle}></Button>
             <h1>{props.titolo}</h1>
             <h2>{props.sottotitolo}</h2>
             <p style = {{color: "red", fontSize: "24px"}}>{toggle? props.paragrafo: "testo non disponibile"}</p>
