@@ -1,12 +1,15 @@
 import Button from "./button"
-
+import { useState } from "react";
 function Section (props) {
+    const [toggle, setToggle] = useState(true);
     function handleClick() {
         console.log(props.paragrafo)
     }
-    let toggle = true;
+    
     function handleToggle() {
-        toggle=!toggle;
+        setToggle(!toggle)
+        console.log("Abbiamo cliccato il pulsante")
+        console.log(toggle)
     }
     
 

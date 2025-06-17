@@ -1,4 +1,5 @@
 import './App.css'
+import Counter from './component/Counter'
 import Section from './component/section'
 function App() {
 const frasi = [
@@ -17,6 +18,7 @@ const frasi = [
 
   return (
     <>
+      <Counter></Counter>
       {frasi.map ((x, index) => (<Section key = {index} paragrafo = {x.paragrafo} button = {x.button}></Section>) )}
 
     </>
