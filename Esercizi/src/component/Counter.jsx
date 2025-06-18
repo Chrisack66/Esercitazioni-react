@@ -17,3 +17,5 @@ function Counter() {
 export default Counter
 
 //Creare un nuovo componente Orologio usando useState che incrementa di secondo in secondo all'infinito. Non usare setTimeout e setInterval, possibilmente.
+
+
