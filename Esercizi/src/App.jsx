@@ -1,35 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import InteractiveWelcome from "./components/InteractiveWelcome.jsx";
+import Login from "./components/Login.jsx";
+import Registrazione from "./components/Registrazione.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const handleLogin = (loginData) => {
+    console.log("Login data:", loginData);
+  };
+  const [users, setUsers] = useState(
+    JSON.parse(localStorage.getItem("users")) || [] //principio di contesto, dati accessibili a tutti i componenti: figli, nipoti.. Problema del props Drilling: un dato che passa da componente a figli
+  );
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <InteractiveWelcome />
+      <Login onLogin={handleLogin} database={users} />
+      <Registrazione database={users} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
