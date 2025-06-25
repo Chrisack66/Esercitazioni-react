@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Dashboard } from "./Dashboard";
 
 function Login({ onLogin, database }) {
   const [username, setUsername] = useState("");
@@ -7,6 +8,8 @@ function Login({ onLogin, database }) {
 
   const [users, setUsers] = useState(database);
   const [message, setMessage] = useState("");
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user") || null));
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onLogin({
@@ -20,6 +23,8 @@ function Login({ onLogin, database }) {
     );
     if (userExist) {
       setMessage(`Il Login al sito e' avvenuta con successo!`);
+      setUser(userExist);
+      localStorage.setItem("user", JSON.stringify(userExist))
     } else {
       setMessage(`Credenziali errate!`);
     }
@@ -31,8 +36,14 @@ function Login({ onLogin, database }) {
     setRemember(false);
   };
 
+  function handleLogout(){
+    setUser(null);
+    localStorage.removeItem("user");
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
+   <div>
+     <form onSubmit={handleSubmit}>
       <input
         type="text"
         value={username}
@@ -56,6 +67,8 @@ function Login({ onLogin, database }) {
       </button>
       {message && <p>{message}</p>}
     </form>
+    {user && <Dashboard user={user} logout={handleLogout}/>}
+   </div>
   );
 }
 
