@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dashboard } from "./Dashboard";
 
-function Login({ onLogin, database }) {
+function Login({database }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -12,11 +12,7 @@ function Login({ onLogin, database }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin({
-      username: username,
-      password: password,
-      remember: remember,
-    });
+    
 
     const userExist = users.find(
       (x) => x.username === username && x.password === password
@@ -67,8 +63,8 @@ function Login({ onLogin, database }) {
       </button>
       {message && <p>{message}</p>}
     </form>
-    {user && <Dashboard user={user} logout={handleLogout}/>}
-   </div>
+    {user && <Dashboard user={user} logout={handleLogout}/>} {/*se esiste uno user loggato, mi fa un render condizionale della mia dashboard*/} 
+    </div>
   );
 }
 
