@@ -15,7 +15,7 @@ export function Dashboard({ logout }) {
     }));
   }
 
-  //PERCHE' NON SI AGGIORNA LA PAGINA? TROVATE UNA SOLUZIONE.. (CIT. Monica)
+  //PERCHE' vedo i dati modificati solo se SI AGGIORNA LA PAGINA ? TROVATE UNA SOLUZIONE.. (CIT. Monica)
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -27,7 +27,9 @@ export function Dashboard({ logout }) {
 
     users.splice(index, 1, editUser); // modifica il nostro user
     localStorage.setItem("users", JSON.stringify(users)); // aggiorniamo il localStorage
-    setEdit(false);
+    
+    setUser(editUser); // aggiorna lo stato del componente
+    setEdit(false); // chiude il form di modifica
   }
 
   return (
