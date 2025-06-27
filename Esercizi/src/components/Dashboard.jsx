@@ -7,6 +7,8 @@ export function Dashboard({ logout }) {
   );
   const [editUser, setEditUser] = useState(user);
 
+  //handlechange attivata al change di ogni campo input. Leggo il valore dell'attributo value e dell'attributo name, destrutturizzando. Ogni volta handlechange aggiorna il valore di editUser tramite setEditUser. Ritorniamo un nuovo oggetto, che contiene tutto quello che stava nel valore originale di editUser, che corrispondeva a user, e aggiorniamo il valore della chiave name sovrascrivendolo, perché già presente.
+  
   function handleChange(e) {
     const { name, value } = e.target;
     setEditUser((prev) => ({
