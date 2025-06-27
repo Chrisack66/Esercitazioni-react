@@ -4,6 +4,8 @@ import InteractiveWelcome from "./components/InteractiveWelcome.jsx";
 import Login from "./components/Login.jsx";
 import Registrazione from "./components/Registrazione.jsx";
 
+
+
 function App() {
   const [users, setUsers] = useState(
     JSON.parse(localStorage.getItem("users")) || [] //principio di contesto, dati accessibili a tutti i componenti: figli, nipoti.. Problema del props Drilling: un dato che passa da componente a figli
@@ -14,6 +16,7 @@ function App() {
       <InteractiveWelcome />
       <Login database={users} />
       <Registrazione database={users} />
+
     </>
   );
 }
