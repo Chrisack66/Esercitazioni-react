@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../contexts/userContext";
 
-function Registrazione({ database }) {
+function Registrazione() {
+  const { registrazione, message } = useContext(UserContext);
   const [formData, setFormData] = useState({
     username: "",
     nome: "",
@@ -8,9 +10,6 @@ function Registrazione({ database }) {
     email: "",
     password: "",
   });
-
-  const [users, setUsers] = useState(database);
-  const [message, setMessage] = useState("");
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -22,20 +21,8 @@ function Registrazione({ database }) {
 
   function handleRegistrazione(e) {
     e.preventDefault();
-    const userExist = users.find(
-      (x) => x.username === formData.username || x.email === formData.email
-    );
-    if (!userExist) {
-      setUsers((prev) => [...prev, formData]); // metto setUsers qui cosi che al click dell'handle registrazione mi carica user
-      setMessage(`La registazione al sito e' avvenuta con successo!`);
-    } else {
-      setMessage(`L'utente risulta registrato.`);
-    }
+    registrazione(formData);
   }
-
-  useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users)); // sposto qui cosi al cambio di users salvo in localStorage
-  }, [users]);
 
   return (
     <form onSubmit={handleRegistrazione}>

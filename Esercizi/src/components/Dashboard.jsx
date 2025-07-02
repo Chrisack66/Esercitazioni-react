@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../contexts/userContext";
 
-export function Dashboard({ logout }) {
+export function Dashboard() {
+  const { logout, user, editUser } = useContext(UserContext);
   const [edit, setEdit] = useState(false);
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user") || null)
-  );
-  const [editUser, setEditUser] = useState(user);
+
+  const [newUser, setnewUser] = useState(user);
 
   //handlechange attivata al change di ogni campo input. Leggo il valore dell'attributo value e dell'attributo name, destrutturizzando. Ogni volta handlechange aggiorna il valore di editUser tramite setEditUser. Ritorniamo un nuovo oggetto, che contiene tutto quello che stava nel valore originale di editUser, che corrispondeva a user, e aggiorniamo il valore della chiave name sovrascrivendolo, perché già presente.
-  
+
   function handleChange(e) {
     const { name, value } = e.target;
-    setEditUser((prev) => ({
+    setnewUser((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -21,16 +21,7 @@ export function Dashboard({ logout }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    localStorage.setItem("user", JSON.stringify(editUser)); // aggiorna user
-    const users = JSON.parse(localStorage.getItem("users"));
-
-    const index = users.findIndex((x) => x.email === user.email);
-
-    users.splice(index, 1, editUser); // modifica il nostro user
-    localStorage.setItem("users", JSON.stringify(users)); // aggiorniamo il localStorage
-    
-    setUser(editUser); // aggiorna lo stato del componente
+    editUser(newUser);
     setEdit(false); // chiude il form di modifica
   }
 

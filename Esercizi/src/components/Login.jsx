@@ -1,30 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Dashboard } from "./Dashboard";
+import { UserContext } from "../contexts/userContext";
 
-function Login({ database }) {
+function Login() {
+  const { login, message, logout } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
 
-  const [users, setUsers] = useState(database);
-  const [message, setMessage] = useState("");
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user") || null)
-  );
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const userExist = users.find(
-      (x) => x.username === username && x.password === password
-    );
-    if (userExist) {
-      setMessage(`Il Login al sito e' avvenuta con successo!`);
-      setUser(userExist);
-      localStorage.setItem("user", JSON.stringify(userExist));
-    } else {
-      setMessage(`Credenziali errate!`);
-    }
+    login(username, password);
   };
 
   const handleReset = () => {
@@ -34,8 +20,7 @@ function Login({ database }) {
   };
 
   function handleLogout() {
-    setUser(null);
-    localStorage.removeItem("user");
+    logout();
   }
 
   return (
@@ -44,8 +29,7 @@ function Login({ database }) {
         <input
           type="text"
           value={username}
-          onChange={(e) => setUsername(e.target.value)
-          }
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
         />
         <input
