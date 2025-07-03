@@ -22,6 +22,13 @@ function Registrazione() {
   function handleRegistrazione(e) {
     e.preventDefault();
     registrazione(formData);
+    setFormData({
+      username: "",
+      nome: "",
+      cognome: "",
+      email: "",
+      password: "",
+    }); // Reset form after submission
   }
 
   return (

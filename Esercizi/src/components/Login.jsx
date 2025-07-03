@@ -2,8 +2,9 @@ import { useState, useContext } from "react";
 import { Dashboard } from "./Dashboard";
 import { UserContext } from "../contexts/userContext";
 
+
 function Login() {
-  const { login, message, logout } = useContext(UserContext);
+  const { login, message, logout, user } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -11,6 +12,9 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     login(username, password);
+    setUsername("");
+    setPassword("");
+    setRemember(false);
   };
 
   const handleReset = () => {

@@ -3,11 +3,13 @@ import { createContext, useEffect, useState } from "react";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || null
   );
   const [db, setDb] = useState(JSON.parse(localStorage.getItem("users")) || []);
+
   function registrazione(formData) {
     setMessage("");
     const userExist = db.find(
@@ -42,13 +44,16 @@ export const UserProvider = ({ children }) => {
   }
   function editUser(editUser) {
     const index = db.findIndex((x) => x.email === user.email);
-    setDb(db.splice(index, 1, editUser));
+    const copiaDatabase = [...db];
+    copiaDatabase.splice(index, 1, editUser); //splice modifica l'array originale, ma a noi interessa un nuovo database, per questo ne faccio una copia su cui opero con splice. Così setDb capisce che è un nuovo array.
+    setDb(copiaDatabase);
     setUser(editUser); // modifica il nostro user
+    localStorage.setItem("user", JSON.stringify(editUser));
   }
 
   return (
     <UserContext.Provider
-      value={{ db, registrazione, login, logout, message, user,editUser }}
+      value={{ db, registrazione, login, logout, message, user, editUser }}
     >
       {children}
     </UserContext.Provider>
