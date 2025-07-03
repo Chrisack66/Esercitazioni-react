@@ -1,10 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Dashboard } from "./Dashboard";
-import { UserContext } from "../contexts/userContext";
+import { useUser } from "../contexts/userContext"; 
 
 
 function Login() {
-  const { login, message, logout, user } = useContext(UserContext);
+  const { login, message, logout, user } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);

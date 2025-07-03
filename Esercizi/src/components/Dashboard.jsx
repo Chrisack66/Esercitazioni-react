@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
-import { UserContext } from "../contexts/userContext";
+import {useState } from "react";
+import { useUser } from "../contexts/userContext";
+
 
 export function Dashboard() {
-  const { logout, user, editUser } = useContext(UserContext);
+  const { logout, user, editUser } = useUser();
   const [edit, setEdit] = useState(false);
 
   const [newUser, setnewUser] = useState(user);

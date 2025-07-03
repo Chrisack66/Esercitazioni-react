@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "../contexts/userContext";
+import React, { useState, useEffect} from "react";
+import { useUser } from "../contexts/userContext";
 
 function Registrazione() {
-  const { registrazione, message } = useContext(UserContext);
+  const { registrazione, message } = useUser();
   const [formData, setFormData] = useState({
     username: "",
     nome: "",

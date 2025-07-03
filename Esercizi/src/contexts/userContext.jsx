@@ -1,6 +1,9 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export const UserContext = createContext();
+const UserContext = createContext();
+
+// hook personalizzato che usa il contesto, così da non dover importare il contesto in ogni file.
+export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
 
