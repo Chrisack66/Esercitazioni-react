@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useUser } from "../contexts/userContext";
 
 export function Dashboard() {
-  const { logout, user, editUser } = useUser();
+  const { logout, user, editUser, db } = useUser();
   const [edit, setEdit] = useState(false);
   const [userList, setUserList] = useState([]);
-  const [amici, setAmici] = useState (user.amici || []);
+  const [amici, setAmici] = useState(user.amici || []);
+  const [rimuoviAmico, setRimuoviAmico] = useState(false);
+  const [toggled, setToggled] = useState(false);
 
   const [newUser, setnewUser] = useState(user);
   useEffect(() => {
@@ -21,12 +23,29 @@ export function Dashboard() {
     fetchDati();
   }, []);
 
-  const handleAddFriend = (user) => {
-    setAmici ((prev) => [...prev, user])
-    localStorage.setItem("nuovoAmico", JSON.stringify(user))
-    formData.amici.push()
+  useEffect(() => {
+    const copiedUser = { ...user };
+    copiedUser.amici = amici;
+    localStorage.setItem("user", JSON.stringify(copiedUser));
+    const copiedUsers = [...db];
+    const index = db.findIndex((x) => x.email === user.email);
+    copiedUsers.splice(index, 1, copiedUser);
+    localStorage.setItem("users", JSON.stringify(copiedUsers));
+  }, [amici]);
 
-    
+
+
+  const handleAddFriend = (user) => {
+    if (!amici.some((x) => x.email === user.email)) {
+      // Controllo se l'utente è già presente tra gli amici
+      setAmici((prev) => [...prev, user]);
+    }
+  };
+
+  const handleRemoveFriend = (email) => {
+    setAmici((prev) => prev.filter((x) => x.email !== email));
+    setRimuoviAmico(true);
+    localStorage.removeItem("user");
   }
 
   //handlechange attivata al change di ogni campo input. Leggo il valore dell'attributo value e dell'attributo name, destrutturizzando. Ogni volta handlechange aggiorna il valore di editUser tramite setEditUser. Ritorniamo un nuovo oggetto, che contiene tutto quello che stava nel valore originale di editUser, che corrispondeva a user, e aggiorniamo il valore della chiave name sovrascrivendolo, perché già presente.
@@ -47,7 +66,14 @@ export function Dashboard() {
     setEdit(false); // chiude il form di modifica
   }
 
-  
+  const handleClick = () => {
+    if (!toggled) {
+      handleAddFriend();
+    }
+    else {
+      handleRemoveFriend();
+    }
+  }
 
   return (
     <div>
@@ -91,19 +117,31 @@ export function Dashboard() {
           <p>Email: {user.email}</p>
         </div>
       )}
-     <button onClick={logout}>Logout</button>
+      <button onClick={logout}>Logout</button>
       <div className="suggerimenti">
         <h6>Potresti conoscere...</h6>
-        {userList.map((x)=> <div>
-        <p>{x.name.title} {x.name.first} {x.name.last}</p>
-      
-          <img src={x.picture.medium}></img>
-          <button onClick={()=> handleAddFriend(x)} className="aggiungi">Aggiungi</button>
-      </div>)}
-    {amici.map((x)=> <div>
-        <p>{x.name.title} {x.name.first} {x.name.last}</p>
-      </div>)}
+        {userList.map((x) => (
+          <div>
+            <p>
+              {x.name.title} {x.name.first} {x.name.last}
+            </p>
+
+            <img src={x.picture.medium}></img>
+            <button onClick = {() => {handleClick}} className="aggiungi">
+              Aggiungi
+            </button>
+          </div>
+        ))}
+        {amici.map((x) => (
+          <div>
+            <p>
+              {x.name.title} {x.name.first} {x.name.last}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
-    </div>
-  )
+  );
 }
+
+//FIXARE LA QUESTIONE DEL BUTTON CHE ALL'ONCLICK TOGGLED DEVE AGGIUNGERE GLI AMICI, AL NOT TOGGLED DEVE TOGLIERLI. NON FUNGE :cgit
