@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useUser } from "../contexts/userContext";
 
 export function Dashboard() {
-  const { logout, user, editUser } = useUser();
+  const { logout, user, editUser, db } = useUser();
   const [edit, setEdit] = useState(false);
   const [userList, setUserList] = useState([]);
+  const [friendList, setFriendList] = useState(user.friends || []);
+  const [userExist, setUserExist] = useState(null);
 
   const [newUser, setnewUser] = useState(user);
   useEffect(() => {
@@ -37,9 +39,40 @@ export function Dashboard() {
     editUser(newUser);
     setEdit(false); // chiude il form di modifica
   }
+  function handleAddFriendList(x) {
+    const exist = friendList.find((y) => x.email === y.email);
+
+    if (!exist) {
+      setFriendList((prev) => [...prev, x]);
+    } else {
+      setUserExist(x);
+    }
+  }
+  function handleRemove(x) {
+    //localStorage.removeItem
+    //rimuovere l'amico dall'array friends
+  }
+  useEffect(() => {
+    // caricare la lista amici dal localStorage cosi da far funzionare il button disable
+    const dbFriends = localStorage.getItem("friends");
+  }, []);
+  useEffect(() => {
+    const copiaUser = { ...user };
+    copiaUser.friends = friendList;
+    localStorage.setItem("user", JSON.stringify(copiaUser));
+    localStorage.setItem("users", JSON.stringify(copiaUser));
+  }, [friendList]);
+
+  useEffect(() => {
+    const copyUserList = [...userList];
+    //fixare logica della lista di amici.
+    // dove quando viene aggiunto un amico, esso non spunti piu' nella sezione 'potresti conoscere'
+    copyUserList.splice(index, 1);
+    setUserList(copyUserList);
+  }, [friendList]);
 
   return (
-    <div>
+    <>
       <h1>Benvenuto {user.username}!</h1>
       <p>Qui di seguito trovi i tuoi dati personali</p>
       <button onClick={() => setEdit(true)}>Modifica</button>
@@ -80,11 +113,34 @@ export function Dashboard() {
           <p>Email: {user.email}</p>
         </div>
       )}
-
+      <h1>Lista amici</h1>
+      {friendList.map((x) => (
+        <div>
+          <img src={x.picture.thumbnail} alt={x.name.first} />
+          <p>
+            {x.name.title} {x.name.first} {x.name.last}
+          </p>
+          <button onClick={handleRemove(x)}>Rimuovi amicizia</button>
+        </div>
+      ))}
       <button onClick={logout}>Logout</button>
-      {userList.map((x)=> <div>
-        <p>{x.name.title} {x.name.first} {x.name.last}</p>
-      </div>)}
-    </div>
+      <div className="cards">
+        <h1>Potresti conoscere</h1>
+        <hr />
+        {userList.map((x) => (
+          <div>
+            <img src={x.picture.thumbnail} alt={x.name.first} />
+            <p>
+              {x.name.title} {x.name.first} {x.name.last}
+            </p>
+
+            <button onClick={() => handleAddFriendList(x)}>
+              Aggiungi agli amici
+            </button>
+          </div>
+        ))}
+        <hr />
+      </div>
+    </>
   );
 }
