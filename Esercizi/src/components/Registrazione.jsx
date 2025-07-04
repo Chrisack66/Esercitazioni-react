@@ -9,6 +9,7 @@ function Registrazione() {
     cognome: "",
     email: "",
     password: "",
+    amici: []
   });
 
   function handleChange(e) {
