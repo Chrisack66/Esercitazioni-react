@@ -1,12 +1,24 @@
-import {useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../contexts/userContext";
-
 
 export function Dashboard() {
   const { logout, user, editUser } = useUser();
   const [edit, setEdit] = useState(false);
+  const [userList, setUserList] = useState([]);
 
   const [newUser, setnewUser] = useState(user);
+  useEffect(() => {
+    const fetchDati = async () => {
+      try {
+        const response = await fetch("https://randomuser.me/api/?results=6");
+        const dati = await response.json();
+        setUserList(dati.results);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDati();
+  }, []);
 
   //handlechange attivata al change di ogni campo input. Leggo il valore dell'attributo value e dell'attributo name, destrutturizzando. Ogni volta handlechange aggiorna il valore di editUser tramite setEditUser. Ritorniamo un nuovo oggetto, che contiene tutto quello che stava nel valore originale di editUser, che corrispondeva a user, e aggiorniamo il valore della chiave name sovrascrivendolo, perché già presente.
 
@@ -70,6 +82,9 @@ export function Dashboard() {
       )}
 
       <button onClick={logout}>Logout</button>
+      {userList.map((x)=> <div>
+        <p>{x.name.title} {x.name.first} {x.name.last}</p>
+      </div>)}
     </div>
   );
 }
