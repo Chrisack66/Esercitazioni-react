@@ -49,7 +49,15 @@ export function Dashboard() {
     }
   }
   function handleRemove(x) {
-    //localStorage.removeItem
+    const copyUserFriends = [...friendList];
+    console.log(copyUserFriends);
+    const index = copyUserFriends.findIndex((y) => y.email === x.email);
+    if (index !== -1) {
+      copyUserFriends.splice(index, 1);
+      setFriendList(copyUserFriends);
+    }
+    console.log(index);
+    //localStorage.removeItem();
     //rimuovere l'amico dall'array friends
   }
   useEffect(() => {
@@ -61,25 +69,20 @@ export function Dashboard() {
     copiaUser.friends = friendList;
     localStorage.setItem("user", JSON.stringify(copiaUser));
     localStorage.setItem("users", JSON.stringify(copiaUser));
-  }, [friendList]);
 
-  useEffect(() => {
+    //logica della lista amici
     const copyUserList = [...userList];
-    console.log("Questo e userList", userList);
-    console.log("Questo e la lista di amici", user.friends);
-    const index = userList.findIndex((x) => {
-      return friendList.some((y) => {
-        /*console.log(x.email);
-        console.log(y.email);*/
-        console.log(y.email.trim() === x.email.trim());
-        return y.email === x.email;
-      });
-    });
-    console.log(index);
-    //fixare logica della lista di amici.
-    // dove quando viene aggiunto un amico, esso non spunti piu' nella sezione 'potresti conoscere'
-    /*copyUserList.splice(index, 1);
-    setUserList(copyUserList);*/
+    const index = copyUserList.findIndex((x) =>
+      friendList.some((y) => y.email.trim() === x.email.trim())
+    );
+
+    if (index !== -1) {
+      copyUserList.splice(index, 1);
+      setUserList(copyUserList);
+    }
+    /*if (copyUserList.length === 0) {
+      fetchDati(); //fixare logica del fetchdati
+    }*/
   }, [friendList]);
 
   return (
@@ -131,7 +134,7 @@ export function Dashboard() {
           <p>
             {x.name.title} {x.name.first} {x.name.last}
           </p>
-          <button onClick={handleRemove(x)}>Rimuovi amicizia</button>
+          <button onClick={() => handleRemove(x)}>Rimuovi amicizia</button>
         </div>
       ))}
       <button onClick={logout}>Logout</button>
