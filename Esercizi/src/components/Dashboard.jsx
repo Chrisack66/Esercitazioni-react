@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/userContext";
+import { useNavigate } from "react-router-dom";
 
 export function Dashboard() {
   const { logout, user, editUser, db } = useUser();
@@ -7,6 +8,7 @@ export function Dashboard() {
   const [userList, setUserList] = useState([]);
   const [friendList, setFriendList] = useState(user.friends || []);
   const [userExist, setUserExist] = useState(null);
+  const navigate = useNavigate();
 
   const [newUser, setnewUser] = useState(user);
   useEffect(() => {
@@ -85,6 +87,11 @@ export function Dashboard() {
     }*/
   }, [friendList]);
 
+  function handleLogout(){
+    logout()
+    navigate("/login");
+  }
+
   return (
     <>
       <h1>Benvenuto {user.username}!</h1>
@@ -137,7 +144,7 @@ export function Dashboard() {
           <button onClick={() => handleRemove(x)}>Rimuovi amicizia</button>
         </div>
       ))}
-      <button onClick={logout}>Logout</button>
+      <button onClick={handleLogout}>Logout</button>
       <div className="cards">
         <h1>Potresti conoscere</h1>
         <hr />

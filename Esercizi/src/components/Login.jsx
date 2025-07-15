@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { Dashboard } from "./Dashboard";
 import { useUser } from "../contexts/userContext"; 
+import { useNavigate } from "react-router-dom";
 
 
 function Login() {
-  const { login, message, logout, user } = useUser();
+  const { login, message } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+  const navigate= useNavigate();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,7 +17,10 @@ function Login() {
     setUsername("");
     setPassword("");
     setRemember(false);
+    navigate("/dashboard");
   };
+
+  // non devo accedere alla rotta dashboard se non sono loggata 
 
   const handleReset = () => {
     setUsername("");
@@ -23,9 +28,6 @@ function Login() {
     setRemember(false);
   };
 
-  function handleLogout() {
-    logout();
-  }
 
   return (
     <div>
@@ -55,7 +57,7 @@ function Login() {
         </button>
         {message && <p>{message}</p>}
       </form>
-      {user && <Dashboard logout={handleLogout} />}{" "}
+     
       {/*se esiste uno user loggato, mi fa un render condizionale della mia dashboard*/}
     </div>
   );

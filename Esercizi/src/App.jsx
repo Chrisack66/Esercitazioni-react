@@ -3,7 +3,8 @@ import "./App.css";
 import InteractiveWelcome from "./components/InteractiveWelcome.jsx";
 import Login from "./components/Login.jsx";
 import Registrazione from "./components/Registrazione.jsx";
-
+import {BrowserRouter, Link, Route, Routes} from "react-router-dom"
+import { Dashboard } from "./components/Dashboard.jsx";
 
 
 function App() {
@@ -13,10 +14,21 @@ function App() {
 
   return (
     <>
-      <InteractiveWelcome />
-      <Login database={users} />
-      <Registrazione database={users} />
-
+    <BrowserRouter>
+      <nav>
+        <Link to="/" >Home</Link>
+        <Link to="/login" >Login</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<InteractiveWelcome />}/>
+        <Route path="/login" element={<Login database={users} />}/>
+        <Route path="/registrazione" element={<Registrazione database={users} />}/>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+      
+      
+      
+    </BrowserRouter>
     </>
   );
 }
